@@ -65,3 +65,46 @@ Dentro de él, cada operación del servicio se expone con una anotación distint
 ```json
 {
   "nombre": "Juan",
+  "apellido": "Perez",
+  "rut": "12345678-9",
+  "email": "juan@correo.cl",
+  "telefono": "911112222",
+  "direccion": "Santiago"
+}
+```
+
+**Venta** (la fecha se asigna sola si no se envía)
+```json
+{
+  "clienteId": 1,
+  "productoId": 1,
+  "cantidad": 2,
+  "total": 500000,
+  "formaPago": "tarjeta",
+  "tipoEntrega": "despacho"
+}
+```
+
+## Ejemplos de uso (PowerShell)
+```powershell
+# Listar todos
+Invoke-RestMethod -Uri http://localhost:8080/api/productos
+
+# Buscar por ID
+Invoke-RestMethod -Uri http://localhost:8080/api/productos/1
+
+# Crear
+Invoke-RestMethod -Uri http://localhost:8080/api/productos -Method Post -ContentType "application/json" -Body '{"nombre":"Guitarra electrica","categoria":"Cuerdas","marca":"Fender","precio":250000,"stock":5,"descripcion":"Guitarra de prueba","imagen":"guitarra.jpg"}'
+
+# Actualizar
+Invoke-RestMethod -Uri http://localhost:8080/api/productos/1 -Method Put -ContentType "application/json" -Body '{"nombre":"Guitarra electrica","categoria":"Cuerdas","marca":"Fender","precio":230000,"stock":8,"descripcion":"Precio rebajado","imagen":"guitarra.jpg"}'
+
+# Eliminar
+Invoke-RestMethod -Uri http://localhost:8080/api/productos/1 -Method Delete
+```
+Para clientes y ventas se usan los mismos comandos cambiando la ruta y el JSON.
+
+## Notas
+- Las entidades no tienen relaciones entre sí (sin `@OneToMany`, `@ManyToOne` ni `@ManyToMany`). `Venta` guarda `clienteId` y `productoId` como números simples.
+- Los repositorios heredan de `JpaRepository` y no tienen métodos personalizados.
+- Los servicios reciben el repositorio por inyección en el constructor.
