@@ -1,8 +1,9 @@
-package sonidoVivo.tienda;
+package sonidoVivo.tienda.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+// Entidad Venta: se guarda en la tabla "venta"
 @Entity
 @Table(name = "venta")
 public class Venta {
@@ -32,6 +33,7 @@ public class Venta {
     public Venta() {
     }
 
+    // Si no se envía fecha, se pone la fecha y hora actual al guardar
     @PrePersist
     public void asignarFecha() {
         if (fecha == null) {

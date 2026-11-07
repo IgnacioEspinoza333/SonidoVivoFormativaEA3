@@ -1,7 +1,8 @@
-package sonidoVivo.tienda;
+package sonidoVivo.tienda.entity;
 
 import jakarta.persistence.*;
 
+// Entidad Cliente: se guarda en la tabla "cliente"
 @Entity
 @Table(name = "cliente")
 public class Cliente {
