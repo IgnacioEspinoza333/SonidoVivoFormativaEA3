@@ -3,11 +3,6 @@
 Proyecto académico en **Spring Boot** con **JPA** y **MySQL**.
 Expone un CRUD completo para tres entidades independientes: `Producto`, `Cliente` y `Venta`.
 
-## Requisitos
-- Java 17
-- MySQL (XAMPP) encendido en el puerto 3306
-- No hace falta instalar Maven: el proyecto incluye Maven Wrapper (`mvnw`)
-
 ## Cómo ejecutar
 1. Encender **MySQL** en XAMPP. La base `tienda_sonido_vivo` se crea sola si no existe.
 2. Abrir una terminal dentro de la carpeta `tienda`.
@@ -46,45 +41,6 @@ Dentro de él, cada operación del servicio se expone con una anotación distint
 | Cliente | `/api/clientes` |
 | Venta | `/api/ventas` |
 
-## Ejemplos de JSON
-
-**Producto**
-```json
-{
-  "nombre": "Guitarra electrica",
-  "categoria": "Cuerdas",
-  "marca": "Fender",
-  "precio": 250000,
-  "stock": 5,
-  "descripcion": "Guitarra de prueba",
-  "imagen": "guitarra.jpg"
-}
-```
-
-**Cliente**
-```json
-{
-  "nombre": "Juan",
-  "apellido": "Perez",
-  "rut": "12345678-9",
-  "email": "juan@correo.cl",
-  "telefono": "911112222",
-  "direccion": "Santiago"
-}
-```
-
-**Venta** (la fecha se asigna sola si no se envía)
-```json
-{
-  "clienteId": 1,
-  "productoId": 1,
-  "cantidad": 2,
-  "total": 500000,
-  "formaPago": "tarjeta",
-  "tipoEntrega": "despacho"
-}
-```
-
 ## Ejemplos de uso (PowerShell)
 ```powershell
 # Listar todos
@@ -102,9 +58,3 @@ Invoke-RestMethod -Uri http://localhost:8080/api/productos/1 -Method Put -Conten
 # Eliminar
 Invoke-RestMethod -Uri http://localhost:8080/api/productos/1 -Method Delete
 ```
-Para clientes y ventas se usan los mismos comandos cambiando la ruta y el JSON.
-
-## Notas
-- Las entidades no tienen relaciones entre sí (sin `@OneToMany`, `@ManyToOne` ni `@ManyToMany`). `Venta` guarda `clienteId` y `productoId` como números simples.
-- Los repositorios heredan de `JpaRepository` y no tienen métodos personalizados.
-- Los servicios reciben el repositorio por inyección en el constructor.
