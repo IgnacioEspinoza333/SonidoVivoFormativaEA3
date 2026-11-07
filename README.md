@@ -3,16 +3,6 @@
 Proyecto académico en **Spring Boot** con **JPA** y **MySQL**.
 Expone un CRUD completo para tres entidades independientes: `Producto`, `Cliente` y `Venta`.
 
-## Cómo ejecutar
-1. Encender **MySQL** en XAMPP. La base `tienda_sonido_vivo` se crea sola si no existe.
-2. Abrir una terminal dentro de la carpeta `tienda`.
-3. Ejecutar:
-   ```
-   .\mvnw.cmd spring-boot:run
-   ```
-   (en Linux o Mac: `./mvnw spring-boot:run`)
-4. La API queda disponible en `http://localhost:8080`.
-
 ## Estructura del proyecto
 ```
 tienda/src/main/java/sonidoVivo/tienda/
