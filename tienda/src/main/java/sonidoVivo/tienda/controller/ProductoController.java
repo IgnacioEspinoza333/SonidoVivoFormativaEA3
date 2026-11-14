@@ -13,56 +13,53 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import sonidoVivo.tienda.entity.Producto;
 import sonidoVivo.tienda.service.ProductoService;
 
-// Controlador REST de Producto: recibe las peticiones HTTP y responde en JSON
-// Todas las rutas empiezan con /api/productos
 @RestController
 @RequestMapping("/api/productos")
+@Tag(name = "Productos", description = "Gestión del catálogo de instrumentos y equipos musicales")
 public class ProductoController {
 
     private final ProductoService productoService;
 
-    // Inyección por constructor: Spring nos entrega el servicio ya creado
     public ProductoController(ProductoService productoService) {
         this.productoService = productoService;
     }
 
-    // GET /api/productos -> lista todos los productos
     @GetMapping
+    @Operation(summary = "Listar todos los productos", description = "Obtiene el catálogo completo de productos disponibles")
     public List<Producto> obtenerTodos() {
         return productoService.obtenerTodos();
     }
 
-    // GET /api/productos/{id} -> busca un producto por id
-    // Si no existe responde 404 (no encontrado)
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar producto por ID", description = "Devuelve el detalle de un producto específico según su ID")
     public ResponseEntity<Producto> buscarPorId(@PathVariable Long id) {
         return productoService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST /api/productos -> crea un producto nuevo (responde 201 creado)
     @PostMapping
+    @Operation(summary = "Crear nuevo producto", description = "Agrega un nuevo instrumento o equipo al inventario (precio en CLP)")
     public ResponseEntity<Producto> guardar(@RequestBody Producto producto) {
         Producto nuevo = productoService.guardar(producto);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
-    // PUT /api/productos/{id} -> actualiza un producto existente
-    // Si no existe responde 404 (no encontrado)
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar producto", description = "Actualiza precio, stock o detalles de un producto existente")
     public ResponseEntity<Producto> actualizar(@PathVariable Long id, @RequestBody Producto producto) {
         return productoService.actualizar(id, producto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE /api/productos/{id} -> elimina un producto
-    // Responde 204 (sin contenido) si lo eliminó, o 404 si no existía
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar producto", description = "Elimina un producto del catálogo según su ID")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         if (productoService.eliminar(id)) {
             return ResponseEntity.noContent().build();
