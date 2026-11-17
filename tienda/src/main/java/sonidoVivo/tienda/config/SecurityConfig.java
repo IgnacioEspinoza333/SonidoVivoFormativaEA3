@@ -1,4 +1,4 @@
-package sonidoVivo.tienda.security;
+package sonidoVivo.tienda.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import sonidoVivo.tienda.security.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
