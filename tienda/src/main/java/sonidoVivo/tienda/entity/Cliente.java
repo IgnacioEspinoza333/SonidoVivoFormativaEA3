@@ -1,6 +1,14 @@
 package sonidoVivo.tienda.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 // Entidad Cliente: se guarda en la tabla "cliente"
 @Entity
@@ -11,15 +19,21 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre es obligatorio")
     @Column(nullable = false)
     private String nombre;
 
+    @NotBlank(message = "El apellido es obligatorio")
     @Column(nullable = false)
     private String apellido;
 
+    @NotBlank(message = "El RUT es obligatorio")
+    @Pattern(regexp = "^\\d{7,8}-[0-9kK]$", message = "El RUT debe tener formato 12345678-9, sin puntos")
     @Column(nullable = false, unique = true)
     private String rut;       // formato 12345678-9, sin puntos
 
+    @NotBlank(message = "El correo es obligatorio")
+    @Email(message = "El correo no tiene un formato válido")
     @Column(nullable = false, unique = true)
     private String email;
 

@@ -16,9 +16,11 @@ public class JwtUtil {
     private final Key SECRET_KEY = Keys.hmacShaKeyFor("ClaveSecretaSuperSeguraParaSonidoVivo2026!@#".getBytes());
     private final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 horas
 
-    public String generarToken(String username) {
+    // Genera el token con el nombre de usuario y su rol ("ADMIN" o "USER")
+    public String generarToken(String username, String rol) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("rol", rol)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
@@ -27,6 +29,11 @@ public class JwtUtil {
 
     public String extraerUsername(String token) {
         return extraerClaims(token).getSubject();
+    }
+
+    // Lee el rol guardado dentro del token (puede ser null en tokens antiguos)
+    public String extraerRol(String token) {
+        return extraerClaims(token).get("rol", String.class);
     }
 
     public boolean validarToken(String token) {

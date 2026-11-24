@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import sonidoVivo.tienda.entity.Venta;
 import sonidoVivo.tienda.service.VentaService;
 
@@ -43,16 +44,17 @@ public class VentaController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // @Valid hace que Spring revise las validaciones de la entidad antes de guardar
     @PostMapping
     @Operation(summary = "Registrar nueva venta", description = "Guarda una venta asociando clienteId, productoId, cantidad y total en CLP")
-    public ResponseEntity<Venta> guardar(@RequestBody Venta venta) {
+    public ResponseEntity<Venta> guardar(@Valid @RequestBody Venta venta) {
         Venta nueva = ventaService.guardar(venta);
         return ResponseEntity.status(HttpStatus.CREATED).body(nueva);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar venta", description = "Modifica los datos de una venta existente según su ID")
-    public ResponseEntity<Venta> actualizar(@PathVariable Long id, @RequestBody Venta venta) {
+    public ResponseEntity<Venta> actualizar(@PathVariable Long id, @Valid @RequestBody Venta venta) {
         return ventaService.actualizar(id, venta)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

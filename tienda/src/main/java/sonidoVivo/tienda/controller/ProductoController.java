@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import sonidoVivo.tienda.entity.Producto;
 import sonidoVivo.tienda.service.ProductoService;
 
@@ -43,16 +44,17 @@ public class ProductoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // @Valid hace que Spring revise las validaciones de la entidad antes de guardar
     @PostMapping
     @Operation(summary = "Crear nuevo producto", description = "Agrega un nuevo instrumento o equipo al inventario (precio en CLP)")
-    public ResponseEntity<Producto> guardar(@RequestBody Producto producto) {
+    public ResponseEntity<Producto> guardar(@Valid @RequestBody Producto producto) {
         Producto nuevo = productoService.guardar(producto);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar producto", description = "Actualiza precio, stock o detalles de un producto existente")
-    public ResponseEntity<Producto> actualizar(@PathVariable Long id, @RequestBody Producto producto) {
+    public ResponseEntity<Producto> actualizar(@PathVariable Long id, @Valid @RequestBody Producto producto) {
         return productoService.actualizar(id, producto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

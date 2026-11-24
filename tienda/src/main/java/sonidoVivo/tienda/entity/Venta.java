@@ -1,7 +1,16 @@
 package sonidoVivo.tienda.entity;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 // Entidad Venta: se guarda en la tabla "venta"
 @Entity
@@ -13,15 +22,21 @@ public class Venta {
     private Long id;
 
     // Sin relaciones: solo guardamos los IDs como números simples
+    @NotNull(message = "El clienteId es obligatorio")
     @Column(nullable = false)
     private Long clienteId;
 
+    @NotNull(message = "El productoId es obligatorio")
     @Column(nullable = false)
     private Long productoId;
 
+    @NotNull(message = "La cantidad es obligatoria")
+    @Min(value = 1, message = "La cantidad debe ser al menos 1")
     @Column(nullable = false)
     private Integer cantidad;
 
+    @NotNull(message = "El total es obligatorio")
+    @Min(value = 0, message = "El total no puede ser negativo")
     @Column(nullable = false)
     private Integer total;
 

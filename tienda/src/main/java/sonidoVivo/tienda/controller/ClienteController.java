@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import sonidoVivo.tienda.entity.Cliente;
 import sonidoVivo.tienda.service.ClienteService;
 
@@ -43,16 +44,17 @@ public class ClienteController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // @Valid hace que Spring revise las validaciones de la entidad antes de guardar
     @PostMapping
     @Operation(summary = "Registrar nuevo cliente", description = "Crea un nuevo cliente con RUT y correo únicos")
-    public ResponseEntity<Cliente> guardar(@RequestBody Cliente cliente) {
+    public ResponseEntity<Cliente> guardar(@Valid @RequestBody Cliente cliente) {
         Cliente nuevo = clienteService.guardar(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar cliente", description = "Modifica los datos de un cliente existente según su ID")
-    public ResponseEntity<Cliente> actualizar(@PathVariable Long id, @RequestBody Cliente cliente) {
+    public ResponseEntity<Cliente> actualizar(@PathVariable Long id, @Valid @RequestBody Cliente cliente) {
         return clienteService.actualizar(id, cliente)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
