@@ -1,49 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import ProductoService from '../services/ProductoService';
+import api from './api';
 
-const ProductoForm = () => {
-    const [nombre, setNombre] = useState('');
-    const [precio, setPrecio] = useState('');
-    const { id } = useParams();
-    const navigate = useNavigate();
+// Servicio de productos: una función por cada operación del CRUD
+// Cada función devuelve la promesa de Axios; los datos vienen en response.data
+const ProductoService = {
 
-    useEffect(() => {
-        if (id) {
-            ProductoService.getProductoById(id).then(response => {
-                setNombre(response.data.nombre);
-                setPrecio(response.data.precio);
-            });
-        }
-    }, [id]);
+    // GET /api/productos
+    getProductos: () => api.get('/productos'),
 
-    const saveOrUpdateProducto = (e) => {
-        e.preventDefault();
-        const producto = { nombre, precio: parseFloat(precio) };
+    // GET /api/productos/{id}
+    getProductoById: (id) => api.get(`/productos/${id}`),
 
-        if (id) {
-            ProductoService.updateProducto(id, producto).then(() => navigate('/'));
-        } else {
-            ProductoService.createProducto(producto).then(() => navigate('/'));
-        }
-    };
+    // POST /api/productos
+    createProducto: (producto) => api.post('/productos', producto),
 
-    return (
-        <div>
-            <h2>{id ? 'Editar Producto' : 'Agregar Producto'}</h2>
-            <form onSubmit={saveOrUpdateProducto}>
-                <div>
-                    <label>Nombre del instrumento:</label>
-                    <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
-                </div>
-                <div style={{ marginTop: '10px' }}>
-                    <label>Precio:</label>
-                    <input type="number" value={precio} onChange={(e) => setPrecio(e.target.value)} required />
-                </div>
-                <button type="submit" style={{ marginTop: '10px' }}>{id ? 'Actualizar' : 'Guardar'}</button>
-            </form>
-        </div>
-    );
+    // PUT /api/productos/{id}
+    updateProducto: (id, producto) => api.put(`/productos/${id}`, producto),
+
+    // DELETE /api/productos/{id}
+    deleteProducto: (id) => api.delete(`/productos/${id}`)
 };
 
-export default ProductoForm;
+export default ProductoService;
