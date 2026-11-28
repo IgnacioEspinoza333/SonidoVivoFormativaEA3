@@ -89,4 +89,35 @@ tienda/src/main/java/sonidoVivo/tienda/
 ```
 
 ## Frontend (React)
-> Pendiente: esta sección se completa cuando termine la integración con el frontend (cómo ejecutarlo con `npm start` en `http://localhost:3000` y qué pantallas incluye).
+Aplicación web en `frontend/` que consume la API con **Axios**.
+
+Cómo ejecutarlo (con el backend ya corriendo):
+```
+cd frontend
+npm install
+npm start
+```
+Se abre en `http://localhost:3000`.
+
+Pantallas:
+| Ruta | Pantalla | Quién puede entrar |
+|---|---|---|
+| `/login` | Inicio de sesión | Todos |
+| `/` | Lista de productos (con eliminar para ADMIN) | USER y ADMIN |
+| `/add` | Agregar producto | Solo ADMIN |
+| `/edit/:id` | Editar producto | Solo ADMIN |
+
+Cómo está organizado (`frontend/src/`):
+```
+services/
+├── api.js              Cliente Axios: URL base, token automático y manejo del 401
+├── AuthService.js      Login, cierre de sesión y datos de la sesión
+└── ProductoService.js  Operaciones CRUD de productos
+components/
+├── Login.js            Pantalla de inicio de sesión
+├── RutaProtegida.js    Protege rutas por sesión y por rol
+├── ProductoList.js     Lista de productos
+└── ProductoForm.js     Formulario para crear y editar
+```
+
+El token JWT y el rol se guardan en `localStorage`. El rol solo se usa para mostrar u ocultar botones: los permisos reales los valida el backend.

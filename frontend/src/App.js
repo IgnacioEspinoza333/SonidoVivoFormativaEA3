@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate, useLocat
 import Login from './components/Login';
 import RutaProtegida from './components/RutaProtegida';
 import ProductoList from './components/ProductoList';
+import ProductoForm from './components/ProductoForm';
 import AuthService from './services/AuthService';
 
 // Encabezado con el título, el usuario conectado y el botón para cerrar sesión
@@ -38,6 +39,17 @@ function App() {
                     <Route path="/" element={
                         <RutaProtegida>
                             <ProductoList />
+                        </RutaProtegida>
+                    } />
+                    {/* Crear y editar: solo ADMIN */}
+                    <Route path="/add" element={
+                        <RutaProtegida soloAdmin>
+                            <ProductoForm />
+                        </RutaProtegida>
+                    } />
+                    <Route path="/edit/:id" element={
+                        <RutaProtegida soloAdmin>
+                            <ProductoForm />
                         </RutaProtegida>
                     } />
                     {/* Cualquier otra dirección vuelve al inicio */}
