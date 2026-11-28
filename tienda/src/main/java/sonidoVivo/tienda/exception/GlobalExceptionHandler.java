@@ -28,6 +28,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(cuerpo);
     }
 
+    // 400: se incumple una regla del negocio (ej: no hay stock suficiente)
+    @ExceptionHandler(ReglaNegocioException.class)
+    public ResponseEntity<Map<String, String>> manejarReglaNegocio(ReglaNegocioException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", ex.getMessage()));
+    }
+
     // 400: el JSON está mal escrito o un campo tiene un tipo incorrecto (ej: texto en un número)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, String>> manejarJsonInvalido(HttpMessageNotReadableException ex) {
