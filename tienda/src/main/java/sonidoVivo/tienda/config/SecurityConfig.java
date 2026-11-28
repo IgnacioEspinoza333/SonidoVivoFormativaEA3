@@ -34,11 +34,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            // Activa CORS usando la configuración de CorsConfig (permite a React en el puerto 3000)
+            // Activa CORS usando la configuración de CorsConfig (permite al frontend en localhost)
             .cors(Customizer.withDefaults())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Rutas públicas: login, Swagger y la ruta interna de errores
+                // Rutas públicas: login, registro, Swagger y la ruta interna de errores
                 .requestMatchers(
                     "/api/auth/**",
                     "/v3/api-docs/**",
@@ -46,6 +46,8 @@ public class SecurityConfig {
                     "/swagger-ui.html",
                     "/error"
                 ).permitAll()
+                // Comprar: pueden USER y ADMIN (debe ir antes de la regla general de POST)
+                .requestMatchers(HttpMethod.POST, "/api/ventas/comprar").hasAnyRole("USER", "ADMIN")
                 // Consultar (GET): pueden USER y ADMIN
                 .requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole("USER", "ADMIN")
                 // Crear, actualizar y eliminar: solo ADMIN

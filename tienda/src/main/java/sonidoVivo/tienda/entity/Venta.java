@@ -13,6 +13,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 // Entidad Venta: se guarda en la tabla "venta"
+// Cada fila representa un producto comprado dentro de una compra
 @Entity
 @Table(name = "venta")
 public class Venta {
@@ -22,6 +23,7 @@ public class Venta {
     private Long id;
 
     // Sin relaciones: solo guardamos los IDs como números simples
+    // clienteId es el ID del usuario que realizó la compra
     @NotNull(message = "El clienteId es obligatorio")
     @Column(nullable = false)
     private Long clienteId;
@@ -40,8 +42,12 @@ public class Venta {
     @Column(nullable = false)
     private Integer total;
 
-    private String formaPago;     // ej: tarjeta, transferencia
+    private String formaPago;     // ej: debito, credito
     private String tipoEntrega;   // ej: retiro, despacho
+
+    // Datos de despacho (solo se usan cuando el tipo de entrega es "despacho")
+    private String region;
+    private String direccion;
 
     private LocalDateTime fecha;
 
@@ -76,6 +82,12 @@ public class Venta {
 
     public String getTipoEntrega() { return tipoEntrega; }
     public void setTipoEntrega(String tipoEntrega) { this.tipoEntrega = tipoEntrega; }
+
+    public String getRegion() { return region; }
+    public void setRegion(String region) { this.region = region; }
+
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
 
     public LocalDateTime getFecha() { return fecha; }
     public void setFecha(LocalDateTime fecha) { this.fecha = fecha; }

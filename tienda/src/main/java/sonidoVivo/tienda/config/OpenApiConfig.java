@@ -58,13 +58,14 @@ public class OpenApiConfig {
             boolean esGet = handlerMethod.hasMethodAnnotation(GetMapping.class);
             boolean esPost = handlerMethod.hasMethodAnnotation(PostMapping.class);
             boolean esPut = handlerMethod.hasMethodAnnotation(PutMapping.class);
+            boolean esCompra = handlerMethod.getMethod().getName().equals("comprar");
             boolean tieneIdEnRuta = operation.getParameters() != null
                     && operation.getParameters().stream().anyMatch(p -> "path".equals(p.getIn()));
             boolean esCliente = handlerMethod.getBeanType().getSimpleName().equals("ClienteController");
 
             respuestas.addApiResponse("401", new ApiResponse().description("No autenticado: falta el token o es inválido"));
 
-            if (!esGet) {
+            if (!esGet && !esCompra) {
                 respuestas.addApiResponse("403", new ApiResponse().description("Acceso denegado: solo el rol ADMIN puede hacerlo"));
             }
             if (esPost || esPut) {
@@ -78,7 +79,7 @@ public class OpenApiConfig {
             }
 
             // Indica en la descripción qué rol necesita el endpoint
-            String permiso = esGet ? "Permiso: rol USER o ADMIN." : "Permiso: solo rol ADMIN.";
+            String permiso = (esGet || esCompra) ? "Permiso: rol USER o ADMIN." : "Permiso: solo rol ADMIN.";
             String descripcion = operation.getDescription();
             operation.setDescription((descripcion == null ? "" : descripcion + " ") + "**" + permiso + "**");
 
